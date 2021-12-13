@@ -1,0 +1,13 @@
+Ground rules:
+1. COMMENT ALL YOUR CHANGES IN BOTH CODE AND PLAN.TXT
+2. don't be an asshole
+
+Plan:
+-Have a function that parses the input file
+    -have the data be converted into an object
+    -basically a map of each node with their connections (adjacent)
+-Have a way to fetch the next node
+    -first with minimum remaining values, aka the nodes with the least number of values available
+    -second with the degree heuristic, aka least number of adjacent nodes (i think, double check)
+    -afterwards, if there are any ties, just pick one randomly
+-Foward checking: just recursively check if there's a dead end??????
