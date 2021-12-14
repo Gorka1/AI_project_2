@@ -6,6 +6,13 @@ Plan:
 -Have a function that parses the input file
     -have the data be converted into an object
     -basically a map of each node with their connections (adjacent)
+        -a node should be its own object with:
+            -a name
+            -a list of its adjacent nodes
+            -a color
+-Fill out a map
+    -each region in the given map has a color node
+    -go through each node and select a color to paint it based on the CSP
 -Have a way to fetch the next node
     -first with minimum remaining values, aka the nodes with the least number of values available
     -second with the degree heuristic, aka least number of adjacent nodes (i think, double check)
