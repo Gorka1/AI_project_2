@@ -45,12 +45,10 @@ class ColorMap:
         return bool(int(self.adjacency[i+1, j]))
     
     def show_adj_map(self):
+        """ prints adjacency """
         print("  ", " ".join(self.order))
         for i in range(len(self.adjacency)):
-            out = self.order[i] + " ".join(self.adjacency[i])
-
-
-# In[67]:
+            print(self.order[i] + " ".join(self.adjacency[i]))
 
 
 def SUV(): # SELECT-UNASSIGNED-VARIABLE
@@ -69,9 +67,6 @@ def degree():  # degree heuristic
     """ takes in a map and constraints and returns a list of regions according to Degree Heuristic """
     regions = []
     return regions
-
-
-# In[71]:
 
 
 if __name__ == '__main__':
