@@ -1,6 +1,6 @@
 Ground rules:
 1. COMMENT ALL YOUR CHANGES IN BOTH CODE AND PLAN.TXT
-2. don't be an asshole
+2. don't be an asshole >:3
 
 Plan:
 -Have a function that parses the input file
@@ -11,3 +11,4 @@ Plan:
     -second with the degree heuristic, aka least number of adjacent nodes (i think, double check)
     -afterwards, if there are any ties, just pick one randomly
 -Foward checking: just recursively check if there's a dead end??????
+-Use next() and forward checking to output final map
