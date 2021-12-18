@@ -105,11 +105,11 @@ if __name__ == '__main__':
         print("ADJ:", new_map.adjacency)
         new_map.show_adj_map()
         
-    # the actual calculations
-    ... # compute answer
+        # the actual calculations
+        ... # compute answer
 
-    # write/show output
-    print(new_map)
+        # write/show output
+        print(new_map)
 #         f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
 #         f.write(str(new_map))
 #         f.close

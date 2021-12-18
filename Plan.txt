@@ -3,7 +3,8 @@ Ground rules:
 2. don't be an asshole >:3
 
 Plan:
--Have a function that parses the input file
+-Have a function that parses all of the files in the input folder
+    -output files numbered
     -have the data be converted into an object
     -basically a map of each node with their connections (adjacent)
         -a node should be its own object with:
