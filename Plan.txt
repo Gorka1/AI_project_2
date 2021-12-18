@@ -19,3 +19,17 @@ Plan:
     -afterwards, if there are any ties, just pick one randomly
 -Foward checking: just recursively check if there's a dead end??????
 -Use next() and forward checking to output final map
+-ACTUAL ALGO PLAN:
+    -we start with a list of all nodes
+    -we then select a node
+        -we use the MRV and Degree heuristics to determine which node
+    -we select a value for that node
+        -we check to see what values are legal, and pick one
+    -we check to see if all other nodes are still assignable
+        -after choosing a value for the current node
+        -if we find that one or more nodes can no longer be assigned, then we go back and pick another value
+            -as a recursive function, this is where we would return false
+        -also, if we find that there are no other nodes to be assigned, then we found an answer, and we return that answer
+    -repeat by selecting another node
+    -Recap: The recursive function will be structed as this:
+        -check if other nodes are valid -> choose a node -> loop over each possible value of that node -> call recursively with that node/value pair

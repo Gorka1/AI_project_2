@@ -63,8 +63,13 @@ def min_val():  # minumum remaining value heuristic
     assert len(regions) > 0
     return regions
     
-def degree():  # degree heuristic
-    """ takes in a map and constraints and returns a list of regions according to Degree Heuristic """
+def degree(map, constraints):  # degree heuristic
+    """ takes in a map and constraints and returns a list of regions according to Degree Heuristic """ #J: what do you mean by this comment???
+    # 
+    # lowest_degree_node = None;
+    # for node in map.nodes:
+    #     if (lowest_degree_node == None) or len(node.values) < lowest_degree_node;
+    #     lowest_degree_node = node;
     regions = []
     return regions
 
