@@ -10,6 +10,13 @@ Plan:
             -a name
             -a list of its adjacent nodes
             -a color
+    -FEATURES OF THE MAP STRUCTURE:
+        -a way to pick out specific nodes (maybe a dictionary)
+        -a way to just pick out a node occording to the heuristics
+            -just call the heuristic functions
+        -a way to check if there are any nodes that don't have any legal values remaining
+            -this could be tied to the node structure
+    -NOTE: this assumes two structures, a 'map' and a 'node'
 -Fill out a map
     -each region in the given map has a color node
     -go through each node and select a color to paint it based on the CSP
