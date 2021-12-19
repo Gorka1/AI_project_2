@@ -34,7 +34,7 @@ class ColorMap:
     def is_valid(self):
         """ checks if a map is *correctly* filled out """
         if self.is_complete():
-            ...
+            return True # TODO: fix
         return False
     
     def is_adjecent(self, r1, r2):
@@ -46,9 +46,11 @@ class ColorMap:
     
     def show_adj_map(self):
         """ prints adjacency """
-        print("  ", " ".join(self.order))
+        max_spacing = 5
+        print((" "*(max_spacing-2)), "  ".join(self.order))
         for i in range(len(self.adjacency)):
-            print(self.order[i] + " ".join(self.adjacency[i]))
+            spacing = " "*(max_spacing - len(self.order[i]))
+            print(self.order[i] + spacing + "   ".join(self.adjacency[i]))
 
 
 def SUV(): # SELECT-UNASSIGNED-VARIABLE
@@ -87,7 +89,9 @@ if __name__ == '__main__':
         temp_colors = {}
         temp_adjacency = []
         temp_order = []
+        print("Computing file ", file_i, ":", input_files[file_i])
         for line in fileinput.FileInput(files = "Inputs/"+input_files[file_i]):  # parse input
+
             line = line.replace('\n', '').replace('\t', '').split(" ")  # formatting
             line = list(filter(lambda x: x != "", line))  # get rid of empty strings - potential spacing edge-case
             if line_num == 1:
@@ -106,15 +110,16 @@ if __name__ == '__main__':
         assert num_regions != -1 and num_colors != -1  # testing
         assert len(temp_adjacency) == len(temp_adjacency[0]) == len(temp_order) == num_regions
         new_map = ColorMap(temp_colors, temp_adjacency, temp_order)
-#         print(temp_colors)
-        print("ADJ:", new_map.adjacency)
         new_map.show_adj_map()
+        print(temp_colors)
+        print(temp_order)
+        print()
         
         # the actual calculations
-        ... # compute answer
+        # compute answer
 
         # write/show output
-        print(new_map)
+        print(str(new_map))
 #         f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
 #         f.write(str(new_map))
 #         f.close
