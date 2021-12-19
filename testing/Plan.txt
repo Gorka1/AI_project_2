@@ -4,19 +4,21 @@ Ground rules:
 
 Plan:
 -Have a function that parses all of the files in the input folder
-    -output files numbered
     -have the data be converted into an object
     -basically a map of each node with their connections (adjacent)
-        -a node should be its own object with:
+        -map has nodes and values for outputting
+        -colors has constraints for reigons
+        -adjacency is a nested list of adjacent thingies organized by the order list
+    -can export to nodes: contains...
             -a name
             -a list of its adjacent nodes
             -a color
     -FEATURES OF THE MAP STRUCTURE:
-        -a way to pick out specific nodes (maybe a dictionary)
+        -a way to pick out specific nodes (map)
         -a way to just pick out a node occording to the heuristics
-            -just call the heuristic functions
+            -just call the heuristic functions (?)
         -a way to check if there are any nodes that don't have any legal values remaining
-            -this could be tied to the node structure
+            -this could be tied to the node structure (colors -> validate)
     -NOTE: this assumes two structures, a 'map' and a 'node'
 -Fill out a map
     -each region in the given map has a color node

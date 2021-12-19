@@ -1,16 +1,23 @@
 # NYU 2021 AI Project 2 (Final) -- Constraint Satisfaction Problems: Map Coloring
 #  by: Kora S. Hughes & Jorge A. Velasquez
 
-
-import copy
 import fileinput
 import os
 
 # Backtracking Algorithm for CSPs
+
+class Node:
+    def __init__(self, new_name, new_color):
+        self.name = new_name
+        self.adj = []
+        self.color = new_color
 # Note: regions = variables & colors = constraints
 class ColorMap:
     def __init__(self, constraints, adjacency, order):
-        """ initialized constraints, adjacent list, and order of values"""
+        """ init map information:
+        constraints = dict of key=reigon, value=possible colors
+        adjacent list = nested binary list of reigon adjacency in order
+        order = ordered list of reigons to read adjacency map"""
         self.map = {key: "" for key, value in constraints.items()}
         # empty string as value is easy to check later on (default/unassigned state)
         self.colors = constraints.copy()
@@ -33,24 +40,45 @@ class ColorMap:
     
     def is_valid(self):
         """ checks if a map is *correctly* filled out """
-        if self.is_complete():
-            return True # TODO: fix
-        return False
+        if not self.is_complete():  # are all reigons filled with a color?
+            return False
+        else:
+            # are all regions assigned a correct color based on constraints?
+            for region, color in self.map.items():
+                if color not in self.colors[region]:
+                    return False
+            # are all adjacent reigons different colors?
+            for i in range(len(self.order)):
+                for j in range(len(self.order)):
+                    if self.adjacency[i][j] == 1 and \
+                            self.map[self.order[i]] == self.map[self.order[j]]:
+                        return False
+        return True
     
     def is_adjecent(self, r1, r2):
-        """ returns whether or not two reigons are adjacent"""
+        """ returns whether or not two reigons are adjacent """
 #         assert r1 != r2
         i = self.order.index(r1)  # Note: will give value error if not found
         j = self.order.index(r2)
         return bool(int(self.adjacency[i+1, j]))
     
     def show_adj_map(self):
-        """ prints adjacency """
+        """ prints formatted view of adjacency """
         max_spacing = 5
         print((" "*(max_spacing-2)), "  ".join(self.order))
         for i in range(len(self.adjacency)):
             spacing = " "*(max_spacing - len(self.order[i]))
             print(self.order[i] + spacing + "   ".join(self.adjacency[i]))
+
+    def export_nodes(self):
+        node_lst = []
+        for i in range(len(self.order)):
+            n1 = Node(self.order[i], self.map[self.order[i]])
+            for j in range(len(self.order)):
+                if (self.adjacency[i][j] == 1):
+                    n1.adj.append(self.order[i])
+            node_lst.append(n1)
+        return node_lst
 
 
 def SUV(): # SELECT-UNASSIGNED-VARIABLE
@@ -111,12 +139,9 @@ if __name__ == '__main__':
         assert len(temp_adjacency) == len(temp_adjacency[0]) == len(temp_order) == num_regions
         new_map = ColorMap(temp_colors, temp_adjacency, temp_order)
         new_map.show_adj_map()
-        print(temp_colors)
-        print(temp_order)
-        print()
         
         # the actual calculations
-        # compute answer
+        # TODO: compute answer here
 
         # write/show output
         print(str(new_map))
