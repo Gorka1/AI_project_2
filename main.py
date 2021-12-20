@@ -150,17 +150,19 @@ if __name__ == '__main__':
         assert num_regions != -1 and num_colors != -1  # testing
         assert len(temp_adjacency) == len(temp_adjacency[0]) == len(temp_order) == num_regions
         new_map = ColorMap(temp_colors, temp_adjacency, temp_order)
+
+        # testing prints
         # new_map.show_adj_map()
         # for temp_node in new_map.export_nodes():
         #     print("Node:", str(temp_node))
-        
+        # print(str(new_map))
+
         # the actual calculations
         # TODO: compute answer here
 
         # write/show output
-        print(str(new_map))
-#         f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
-#         f.write(str(new_map))
-#         f.close
+        f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
+        f.write(str(new_map))
+        f.close
         
     print("\n...end")
