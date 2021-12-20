@@ -12,6 +12,16 @@ class Node:
         self.adj = []
         self.color = new_color
         self.color_options = ""
+
+    def __str__(self):
+        out = self.name
+        out += ": " + self.color
+        out += ", " + str(self.adj)
+        return out
+
+    def is_valid(self):
+        return self.color in self.color_options
+
 # Note: regions = variables & colors = constraints
 class ColorMap:
     def __init__(self, constraints, adjacency, order):
@@ -77,7 +87,7 @@ class ColorMap:
             n1 = Node(self.order[i], self.map[self.order[i]])
             n1.color_options = self.colors[self.order[i]];
             for j in range(len(self.order)):
-                if (self.adjacency[i][j] == 1):
+                if (self.adjacency[i][j] == "1"):
                     n1.adj.append(self.order[j])
             node_lst.append(n1)
         return node_lst
@@ -140,7 +150,9 @@ if __name__ == '__main__':
         assert num_regions != -1 and num_colors != -1  # testing
         assert len(temp_adjacency) == len(temp_adjacency[0]) == len(temp_order) == num_regions
         new_map = ColorMap(temp_colors, temp_adjacency, temp_order)
-        new_map.show_adj_map()
+        # new_map.show_adj_map()
+        # for temp_node in new_map.export_nodes():
+        #     print("Node:", str(temp_node))
         
         # the actual calculations
         # TODO: compute answer here
