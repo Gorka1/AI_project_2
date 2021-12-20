@@ -11,6 +11,7 @@ class Node:
         self.name = new_name
         self.adj = []
         self.color = new_color
+        self.color_options = ""
 # Note: regions = variables & colors = constraints
 class ColorMap:
     def __init__(self, constraints, adjacency, order):
@@ -74,9 +75,10 @@ class ColorMap:
         node_lst = []
         for i in range(len(self.order)):
             n1 = Node(self.order[i], self.map[self.order[i]])
+            n1.color_options = self.colors[self.order[i]];
             for j in range(len(self.order)):
                 if (self.adjacency[i][j] == 1):
-                    n1.adj.append(self.order[i])
+                    n1.adj.append(self.order[j])
             node_lst.append(n1)
         return node_lst
 
