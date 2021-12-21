@@ -180,10 +180,12 @@ def get_node(node_list, map):
                 curr_ret_node = node;
         return curr_ret_node;
 
-# how do i update the map???
+# Returns a tuple (was an answer found, the answer found)
 def back_track(map):
-    if not map.is_valid:
-        return False;
+    if map.is_valid():
+        return (True, map);
+    elif not map.valid_adjacent_reigons():
+        return (False, map);
     else:
         # node_result = False;
         # # needs
@@ -194,7 +196,9 @@ def back_track(map):
         for color in curr_node.color:
             new_map = map.deepcopy()
             new_map.map[curr_node.name] = color;
-            back_track(new_map);
+            result = back_track(new_map);
+            if result[0]:
+                return result;
 
 if __name__ == '__main__':
     print("start...\n")
@@ -239,10 +243,14 @@ if __name__ == '__main__':
 
         # the actual calculations
         # TODO: compute answer here
+        new_map = back_track(new_map);
 
-        # write/show output
-        f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
-        f.write(str(new_map))
-        f.close()
+        if new_map[0] != True:
+            print("Solution not found");
+        else:
+            # write/show output
+            f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
+            f.write(str(new_map))
+            f.close()
         
     print("\n...end")
