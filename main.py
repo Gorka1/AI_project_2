@@ -23,8 +23,8 @@ class Node:
     def is_valid(self):
         return self.color in self.color_options
 
-    # def num_unassigned_n():
-    #     for node in self.adj
+    def __repr__(self) -> str:
+        return str(self);
 
 # Note: regions = variables & colors = constraints
 class ColorMap:
@@ -124,29 +124,6 @@ class ColorMap:
             assert type(n1) == Node
             self.import_node(n1)
 
-
-def SUV(): # SELECT-UNASSIGNED-VARIABLE
-    ...
-    
-def ODV(): # ORDER-DOMAIN-VALUES
-    ...
-
-def min_val():  # minumum remaining value heuristic
-    """ takes in a map and constraints and returns a list of regions according to MRV """
-    regions = []
-    assert len(regions) > 0
-    return regions
-    
-def degree(map, constraints):  # degree heuristic
-    """ takes in a map and constraints and returns a list of regions according to Degree Heuristic """ #J: what do you mean by this comment???
-    # 
-    # lowest_degree_node = None;
-    # for node in map.nodes:
-    #     if (lowest_degree_node == None) or len(node.values) < lowest_degree_node;
-    #     lowest_degree_node = node;
-    regions = []
-    return regions
-
 def num_unassigned_n(node, map):
     ret_val = 0;
     for n_node in node.adj:
@@ -157,11 +134,14 @@ def num_unassigned_n(node, map):
 # Params: node_list
 # node
 def get_node(node_list, map):
+    print("get_node list: ", node_list)
     curr_min_node = [];
     curr_min_moves = 0;
     # minumum remaining value heuristic
     for node in node_list:
-        if node.color != "":
+        print(node)
+        if node.color == "":
+            print(node.color_options)
             legal_moves = len(node.color_options);
             if legal_moves == curr_min_moves:
                 curr_min_node.append(node);
@@ -169,8 +149,12 @@ def get_node(node_list, map):
                 curr_min_node.clear();
                 curr_min_moves = legal_moves;
                 curr_min_node.append(node);
-    # degree heuristic
+
+    print("curr_min_node", curr_min_node)
     if len(curr_min_node) == 0:
+        return None;
+    # degree heuristic
+    if len(curr_min_node) == 1:
         return curr_min_node[0];
     else:
         curr_ret_node = curr_min_node[0];
@@ -182,20 +166,24 @@ def get_node(node_list, map):
 
 # Returns a tuple (was an answer found, the answer found)
 def back_track(map):
+    print("running back track")
+    # print("Current map nodes: ", map.export_nodes())
     if map.is_valid():
+        print("map is found valid")
         return (True, map);
     elif not map.valid_adjacent_reigons():
+        print("map is found illegal")
         return (False, map);
     else:
-        # node_result = False;
-        # # needs
-        # while (not node_result):
-        #     curr_node = get_node();
-        #     node_result = back_track(curr_node);
-        curr_node = get_node(map.export_nodes);
+        print("recursive call")
+        curr_node = get_node(map.export_nodes(), map);
+        print(curr_node)
+        if curr_node == None:
+            return (False, map);
         for color in curr_node.color:
             new_map = map.deepcopy()
             new_map.map[curr_node.name] = color;
+            print(new_map)
             result = back_track(new_map);
             if result[0]:
                 return result;
@@ -240,17 +228,24 @@ if __name__ == '__main__':
         # for temp_node in new_map.export_nodes():
         #     print("Node:", str(temp_node))
         # print(str(new_map))
+        print("Current map nodes: ", new_map.export_nodes())
 
         # the actual calculations
         # TODO: compute answer here
-        new_map = back_track(new_map);
+        new_map_tuple = back_track(new_map);
 
-        if new_map[0] != True:
+        #new_map_tuple[1].map["NSW"] = 'R'
+        new_map_nodes =new_map_tuple[1].export_nodes();
+        print("New map color: ",new_map_nodes[0].color)
+
+        print("Current map nodes: ", new_map_tuple[1].export_nodes())
+
+        if new_map_tuple[0] != True:
             print("Solution not found");
         else:
             # write/show output
             f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
-            f.write(str(new_map))
+            f.write(str(new_map_tuple[0]))
             f.close()
         
     print("\n...end")
