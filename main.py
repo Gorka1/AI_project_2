@@ -79,17 +79,18 @@ class ColorMap:
             j = 0  # index of subreigon
             for adj_reigon in self.adjacency[i]:
                 if adj_reigon == "1" and self.map[self.order[j]] != "":  # if adjacent reigon has color we save it
-                    color_lst.append(self.map[self.order[j]])
+                    if not self.map[self.order[j]] in color_lst:         # a check to make sure colors aren't repeat in color_lst
+                        color_lst.append(self.map[self.order[j]])
                 j += 1
             color_count = 0
             for temp_color in color_lst:  # for each adjacent color
                 if temp_color in self.colors[reigon]:  # if color is in constrains we inc
                     color_count += 1
             # if adj colors in constraints >= num constraints there are no moves
+            #print(color_count, color_lst)
             if color_count >= len(self.colors[reigon]):
                 return False
         return True
-
 
     def is_adjecent(self, r1, r2):
         """ returns whether or not two reigons are adjacent """
@@ -170,9 +171,9 @@ def back_track(map):
     # check if the input map is an answer
     if map.is_valid():  # if map is completely filled out and correct
         return (True, map)
-    # valid_adjacent_reigons() is forward checking, it looks to see if any regions on the map no longer have legal choices
-    # elif not map.valid_adjacent_reigons():  # check to see if there are no longer any nodes that can be filled out
-    #     return (False, map);
+    # valid_adjacent_reigons() is FORWARD CHECKING, it looks to see if any regions on the map no longer have legal choices
+    elif not map.valid_adjacent_reigons():
+        return (False, map);
     else:
         curr_node = get_node(map.export_nodes(), map) # getting the next node according to heuristics
         # if getting the node somehow failed, something bad happened, chances are this map isn't even good in the first place
