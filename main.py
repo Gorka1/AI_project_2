@@ -93,7 +93,7 @@ class ColorMap:
 
     def is_adjecent(self, r1, r2):
         """ returns whether or not two reigons are adjacent """
-#         assert r1 != r2
+        # assert r1 != r2
         i = self.order.index(r1)  # Note: will give value error if not found
         j = self.order.index(r2)
         return bool(int(self.adjacency[i+1, j]))
@@ -126,20 +126,22 @@ class ColorMap:
             assert type(n1) == Node
             self.import_node(n1)
 
-def num_unassigned_n(node, map): # TODO: fix up description & comment @ Jorge
+# returns number of unassigned neighbors a node has, used for the degree heuristic
+def num_unassigned_n(node, map):
     ret_val = 0
     for n_node in node.adj:
         if map.map[n_node] == "":
             ret_val += 1
     return ret_val
 
-
+# this is the SELECT-UNASSIGNED-VARIABLE function (called get_node for brevity)
 def get_node(node_list, map):
-    """ Takes in node lst + map and returns a node"""  # TODO: fix up description & comment @ Jorge
-    curr_min_node = []
+    """ Takes in node lst + map and returns a node"""
+    curr_min_node = []  # list is used in case of multiple MRV nodes
     curr_min_moves = math.inf
     # minumum remaining value heuristic
     for node in node_list:
+        # only consider unassigned nodes
         if node.color == "":
             legal_moves = len(node.color_options)
             if legal_moves == curr_min_moves:
@@ -148,10 +150,10 @@ def get_node(node_list, map):
                 curr_min_node.clear()
                 curr_min_moves = legal_moves
                 curr_min_node.append(node)
-
+    # if a node_list with only filled out nodes was passed (or and empty list was passed), curr_min_node won't update, so return None
     if len(curr_min_node) == 0:
         return None
-    # degree heuristic
+    # degree heuristic (based on unassigned neighbors)
     if len(curr_min_node) == 1:
         return curr_min_node[0]
     else:
@@ -168,6 +170,7 @@ def back_track(map):
     # check if the input map is an answer
     if map.is_valid():  # if map is completely filled out and correct
         return (True, map)
+    # valid_adjacent_reigons() is forward checking, it looks to see if any regions on the map no longer have legal choices
     # elif not map.valid_adjacent_reigons():  # check to see if there are no longer any nodes that can be filled out
     #     return (False, map);
     else:
@@ -220,14 +223,8 @@ if __name__ == '__main__':
         new_map = ColorMap(temp_colors, temp_adjacency, temp_order)  # creation of map structure
         assert new_map.valid_adjacent_reigons()  # making sure map is validated - aka has no immediate dead ends
 
-        print("Start map:", new_map.__repr__())
-        print("Start map nodes: ", new_map.export_nodes())
-
         # the actual calculations
         new_map_tuple = back_track(new_map)
-
-        print("Final map:", new_map_tuple[1].__repr__())  # showing final map
-        print("Final map nodes: ", new_map_tuple[1].export_nodes())
 
         if new_map_tuple[0] != True:
             print("Solution not found")
