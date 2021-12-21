@@ -79,7 +79,7 @@ class ColorMap:
             j = 0  # index of subreigon
             for adj_reigon in self.adjacency[i]:
                 if adj_reigon == "1" and self.map[self.order[j]] != "":  # if adjacent reigon has color we save it
-                    if not self.map[self.order[j]] in color_lst:         # a check to make sure colors aren't repeat in color_lst
+                    if not self.map[self.order[j]] in color_lst:  # unique colors only
                         color_lst.append(self.map[self.order[j]])
                 j += 1
             color_count = 0
@@ -111,12 +111,12 @@ class ColorMap:
         """ export all current map information into a list of Node's"""
         node_lst = []
         for i in range(len(self.order)):
-            n1 = Node(self.order[i], self.map[self.order[i]])
+            n1 = Node(self.order[i], self.map[self.order[i]])  # add name and color
             n1.color_options = self.colors[self.order[i]]
             for j in range(len(self.order)):
                 if (self.adjacency[i][j] == "1"):
                     n1.adj.append(self.order[j])
-            node_lst.append(n1)
+            node_lst.append(n1)  # add adj reigons
         return node_lst
 
     def import_node(self, n1):  # (unused) import stuff for nodes in case we want it again
@@ -127,8 +127,9 @@ class ColorMap:
             assert type(n1) == Node
             self.import_node(n1)
 
-# returns number of unassigned neighbors a node has, used for the degree heuristic
+
 def num_unassigned_n(node, map):
+    """ returns number of unassigned neighbors a node has, used for the degree heuristic """
     ret_val = 0
     for n_node in node.adj:
         if map.map[n_node] == "":
@@ -173,7 +174,7 @@ def back_track(map):
         return (True, map)
     # valid_adjacent_reigons() is FORWARD CHECKING, it looks to see if any regions on the map no longer have legal choices
     elif not map.valid_adjacent_reigons():
-        return (False, map);
+        return (False, map)
     else:
         curr_node = get_node(map.export_nodes(), map) # getting the next node according to heuristics
         # if getting the node somehow failed, something bad happened, chances are this map isn't even good in the first place
