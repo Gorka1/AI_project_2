@@ -176,6 +176,8 @@ def back_track(map):
         # looping through the possible options of the current node
         for color in curr_node.color_options:
             new_map = copy.deepcopy(map);
+            # print("old map:", map)
+            # print("new map:", new_map)
             new_map.map[curr_node.name] = color;
             result = back_track(new_map);
             if result[0]:
@@ -222,6 +224,13 @@ if __name__ == '__main__':
         #     print("Node:", str(temp_node))
         # print(str(new_map))
         print("Start map nodes: ", new_map.export_nodes())
+        # test_map = copy.deepcopy(new_map)
+        # #test_map = new_map;
+        # test_map.map["NSW"] = "r"
+        # x = new_map.export_nodes();
+        # print("real map", new_map, "Nodes:", x)
+        # x = test_map.export_nodes();
+        # print("Test map", test_map, "Nodes:", x)
 
         # the actual calculations
         # TODO: compute answer here
