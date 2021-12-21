@@ -1,3 +1,25 @@
+## General:
+ -This project is the product of Kora S. Hughes and Jorge A. V. Belmonte for the purpose of their AI Project #2
+  --NYU (Due: Dec. 22nd, 2021)
+ -Input files, instructions.txt, main.py and Samples (/testing) provided by professor Wong
+
+## How To Run:
+ -To run this project, place all valid game files within the /Input directory folder
+ -Then, from the AI_project_2 project directory, run the main.py file with python3
+ -This can be accomplished by typing the following line into the terminal...
+#### python3 main.py
+ --Note: you can ignore the terminal output
+ -The resulting files will be in the /Output directory
+ --Note: running code with existing output files in the output folder will result in undefined behavior (overwritting)
+ --Note: if you wish to run using the finalcode.txt you must export it to a .py file
+
+## Other Info:
+ -The text version of the code is available in the finalcode.txt as well as below this section
+ -Repo History: https://github.com/Jorge-A-Velasquez/AI_project_2
+ --If you want access to the repo email me either of the project owners
+
+
+## Final Code:
 # NYU 2021 AI Project 2 (Final) -- Constraint Satisfaction Problems: Map Coloring
 #  by: Kora S. Hughes & Jorge A. Velasquez
 
@@ -41,20 +63,20 @@ class ColorMap:
         self.adjacency = adjacency  # nested list of adjacent things
         self.order = order  # order of reigons
         # Note: constraint dict is (key, value) : (region, list of potential values)
-    
+
     def __str__(self):  # output function
         out = ""
         for region, color in self.map.items():
             out += str(region) + " = " + str(color) + "\n"
         return out
-            
+
     def is_complete(self):
         """ checks if map is completely filled out """
         for region, color in self.map.items():
             if color == "":
                 return False
         return True
-    
+
     def is_valid(self):
         """ checks if a map is *correctly* filled out """
         if not self.is_complete():  # are all reigons filled with a color?
@@ -97,7 +119,7 @@ class ColorMap:
         i = self.order.index(r1)  # Note: will give value error if not found
         j = self.order.index(r2)
         return bool(int(self.adjacency[i+1, j]))
-    
+
     def show_adj_map(self):
         """ prints formatted view of adjacency """
         max_spacing = 5
@@ -189,10 +211,10 @@ if __name__ == '__main__':
     input_files = os.listdir(os.getcwd() + "/Inputs")  # get all files in input dir
     for file_i in range(len(input_files)):  # run code on all files in directory
         line_num = 1  # keeping track of what input line maps to what value
-        
+
         num_regions = -1  # used for error checking
         num_colors = -1
-        
+
         temp_colors = {}  # color constraints and other map information
         temp_adjacency = []
         temp_order = []
@@ -237,3 +259,22 @@ if __name__ == '__main__':
             f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
             f.write(str(new_map_tuple[1]))
             f.close()
+
+## Output Files:
+### Output 1:
+NSW = G
+NT = G
+Q = R
+SA = B
+WA = R
+V = R
+
+### Output 2
+R1 = G
+R2 = B
+R3 = R
+R4 = Y
+R5 = R
+R6 = B
+R7 = R
+R8 = Y

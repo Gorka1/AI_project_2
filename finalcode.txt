@@ -41,20 +41,20 @@ class ColorMap:
         self.adjacency = adjacency  # nested list of adjacent things
         self.order = order  # order of reigons
         # Note: constraint dict is (key, value) : (region, list of potential values)
-    
+
     def __str__(self):  # output function
         out = ""
         for region, color in self.map.items():
             out += str(region) + " = " + str(color) + "\n"
         return out
-            
+
     def is_complete(self):
         """ checks if map is completely filled out """
         for region, color in self.map.items():
             if color == "":
                 return False
         return True
-    
+
     def is_valid(self):
         """ checks if a map is *correctly* filled out """
         if not self.is_complete():  # are all reigons filled with a color?
@@ -97,7 +97,7 @@ class ColorMap:
         i = self.order.index(r1)  # Note: will give value error if not found
         j = self.order.index(r2)
         return bool(int(self.adjacency[i+1, j]))
-    
+
     def show_adj_map(self):
         """ prints formatted view of adjacency """
         max_spacing = 5
@@ -189,10 +189,10 @@ if __name__ == '__main__':
     input_files = os.listdir(os.getcwd() + "/Inputs")  # get all files in input dir
     for file_i in range(len(input_files)):  # run code on all files in directory
         line_num = 1  # keeping track of what input line maps to what value
-        
+
         num_regions = -1  # used for error checking
         num_colors = -1
-        
+
         temp_colors = {}  # color constraints and other map information
         temp_adjacency = []
         temp_order = []
