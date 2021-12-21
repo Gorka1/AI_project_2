@@ -75,9 +75,11 @@ class ColorMap:
         for reigon, color in self.map.items():
             color_lst = []
             i = self.order.index(reigon)  # adj index of this reigon
+            j = 0  # index of subreigon
             for adj_reigon in self.adjacency[i]:
-                if self.map[adj_reigon] != "":  # if adjacent reigon has color we save it
+                if adj_reigon == "1" and self.map[self.order[j]] != "":  # if adjacent reigon has color we save it
                     color_lst.append(self.map[adj_reigon])
+                j += 1
             color_count = 0
             for temp_color in color_lst:  # for each adjacent color
                 if temp_color in self.colors[reigon]:  # if color is in constrains we inc
