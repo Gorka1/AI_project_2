@@ -67,7 +67,7 @@ class ColorMap:
             # are all adjacent reigons different colors?
             for i in range(len(self.order)):
                 for j in range(len(self.order)):
-                    if self.adjacency[i][j] == 1 and self.map[self.order[i]] == self.map[self.order[j]]:
+                    if self.adjacency[i][j] == "1" and self.map[self.order[i]] == self.map[self.order[j]]:
                         return False
         return True
 
@@ -163,10 +163,13 @@ def get_node(node_list, map):
 
 # Returns a tuple (was an answer found, the answer found)
 def back_track(map):
+    print("back track called with map:", map.export_nodes(), map.is_valid(), map.valid_adjacent_reigons())
+    # check if the input map is an answer
     if map.is_valid():
         return (True, map);
-    elif not map.valid_adjacent_reigons():
-        return (False, map);
+    # check to see if there are no longer any nodes that can be filled out
+    # elif not map.valid_adjacent_reigons():
+    #     return (False, map);
     else:
         # getting the next node according to heuristics
         curr_node = get_node(map.export_nodes(), map);
@@ -182,7 +185,8 @@ def back_track(map):
             result = back_track(new_map);
             if result[0]:
                 return result;
-    return (False, map);
+        # no valid solution was found
+        return (False, map);
 
 if __name__ == '__main__':
     print("start...\n")
@@ -223,7 +227,10 @@ if __name__ == '__main__':
         # for temp_node in new_map.export_nodes():
         #     print("Node:", str(temp_node))
         # print(str(new_map))
+        print("Start map:", new_map.__repr__())
         print("Start map nodes: ", new_map.export_nodes())
+        #new_map.map["NSW"] = 'R'
+        print("Start map valid?", new_map.valid_adjacent_reigons())
         # test_map = copy.deepcopy(new_map)
         # #test_map = new_map;
         # test_map.map["NSW"] = "r"
@@ -235,7 +242,8 @@ if __name__ == '__main__':
         # the actual calculations
         # TODO: compute answer here
         new_map_tuple = back_track(new_map);
-
+        
+        print("Final map:", new_map_tuple[1].__repr__())
         print("Final map nodes: ", new_map_tuple[1].export_nodes())
 
         if new_map_tuple[0] != True:
@@ -243,7 +251,7 @@ if __name__ == '__main__':
         else:
             # write/show output
             f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
-            f.write(str(new_map_tuple[0]))
+            f.write(str(new_map_tuple[1]))
             f.close()
         
     print("\n...end")

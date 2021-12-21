@@ -1,0 +1,9 @@
+*Map:
+R1 = G
+R2 = B
+R3 = R
+R4 = Y
+R5 = R
+R6 = B
+R7 = R
+R8 = Y
