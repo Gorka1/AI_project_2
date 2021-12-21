@@ -3,6 +3,7 @@
 
 import fileinput
 import os
+import copy
 
 # Backtracking Algorithm for CSPs
 
@@ -11,7 +12,7 @@ class Node:
         self.name = new_name
         self.adj = []
         self.color = new_color
-        self.color_options = ""
+        self.color_options = ""     # treat this as list
 
     def __str__(self):
         out = self.name
@@ -22,6 +23,9 @@ class Node:
     def is_valid(self):
         return self.color in self.color_options
 
+    # def num_unassigned_n():
+    #     for node in self.adj
+
 # Note: regions = variables & colors = constraints
 class ColorMap:
     def __init__(self, constraints, adjacency, order):
@@ -29,6 +33,7 @@ class ColorMap:
         constraints = dict of key=reigon, value=possible colors
         adjacent list = nested binary list of reigon adjacency in order
         order = ordered list of reigons to read adjacency map"""
+        # keys: region name, value: color
         self.map = {key: "" for key, value in constraints.items()}
         # empty string as value is easy to check later on (default/unassigned state)
         self.colors = constraints.copy()
@@ -115,16 +120,22 @@ def degree(map, constraints):  # degree heuristic
     regions = []
     return regions
 
+def num_unassigned_n(node, map):
+    ret_val = 0;
+    for n_node in node.adj:
+        if map.map[n_node].new_color == "":
+            ret_val += 1;
+    return ret_val;
 
 # Params: node_list
 # node
-def get_node(node_list):
+def get_node(node_list, map):
     curr_min_node = [];
     curr_min_moves = 0;
     # minumum remaining value heuristic
     for node in node_list:
-        if node.color != None:
-            legal_moves = node.legal_moves;
+        if node.color != "":
+            legal_moves = len(node.color_options);
             if legal_moves == curr_min_moves:
                 curr_min_node.append(node);
             elif legal_moves < curr_min_moves:
@@ -137,8 +148,8 @@ def get_node(node_list):
     else:
         curr_ret_node = curr_min_node[0];
         for node in curr_min_node:
-            curr_value = node.num_unassigned_n();
-            if curr_value > curr_ret_node.num_unassigned_n():
+            curr_value = num_unassigned_n(node, map);
+            if curr_value < num_unassigned_n(curr_ret_node, map):
                 curr_ret_node = node;
         return curr_ret_node;
 
@@ -152,9 +163,11 @@ def back_track(map):
         # while (not node_result):
         #     curr_node = get_node();
         #     node_result = back_track(curr_node);
-        curr_node = get_node(map.nodes);
+        curr_node = get_node(map.export_nodes);
         for color in curr_node.color:
-            map.update_region();
+            new_map = map.deepcopy()
+            new_map.map[curr_node.name] = color;
+            back_track(new_map);
 
 if __name__ == '__main__':
     print("start...\n")
