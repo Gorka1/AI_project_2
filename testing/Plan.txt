@@ -14,6 +14,7 @@ Plan:
             -a list of its adjacent nodes
             -a color
     -FEATURES OF THE MAP STRUCTURE:
+        -Note: len(Node.color_options) = number of legal moves
         -a way to pick out specific nodes (map)
         -a way to just pick out a node occording to the heuristics
             -just call the heuristic functions (?)
