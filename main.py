@@ -4,6 +4,7 @@
 import fileinput
 import os
 import copy
+import math
 
 # Backtracking Algorithm for CSPs
 
@@ -127,21 +128,18 @@ class ColorMap:
 def num_unassigned_n(node, map):
     ret_val = 0;
     for n_node in node.adj:
-        if map.map[n_node].new_color == "":
+        if map.map[n_node] == "":
             ret_val += 1;
     return ret_val;
 
 # Params: node_list
 # node
 def get_node(node_list, map):
-    print("get_node list: ", node_list)
     curr_min_node = [];
-    curr_min_moves = 0;
+    curr_min_moves = math.inf;
     # minumum remaining value heuristic
     for node in node_list:
-        print(node)
         if node.color == "":
-            print("color options:", node.color_options)
             legal_moves = len(node.color_options);
             if legal_moves == curr_min_moves:
                 curr_min_node.append(node);
@@ -150,7 +148,6 @@ def get_node(node_list, map):
                 curr_min_moves = legal_moves;
                 curr_min_node.append(node);
 
-    print("curr_min_node", curr_min_node)
     if len(curr_min_node) == 0:
         return None;
     # degree heuristic
@@ -166,27 +163,21 @@ def get_node(node_list, map):
 
 # Returns a tuple (was an answer found, the answer found)
 def back_track(map):
-    print("running back track")
-    # print("Current map nodes: ", map.export_nodes())
     if map.is_valid():
-        print("map is found valid")
         return (True, map);
     elif not map.valid_adjacent_reigons():
-        print("map is found illegal")
         return (False, map);
     else:
-        print("recursive call")
         curr_node = get_node(map.export_nodes(), map);
-        print(curr_node)
         if curr_node == None:
             return (False, map);
         for color in curr_node.color:
             new_map = map.deepcopy()
             new_map.map[curr_node.name] = color;
-            print(new_map)
             result = back_track(new_map);
             if result[0]:
                 return result;
+    return (False, map);
 
 if __name__ == '__main__':
     print("start...\n")
@@ -227,17 +218,13 @@ if __name__ == '__main__':
         # for temp_node in new_map.export_nodes():
         #     print("Node:", str(temp_node))
         # print(str(new_map))
-        print("Current map nodes: ", new_map.export_nodes())
+        print("Start map nodes: ", new_map.export_nodes())
 
         # the actual calculations
         # TODO: compute answer here
         new_map_tuple = back_track(new_map);
 
-        #new_map_tuple[1].map["NSW"] = 'R'
-        new_map_nodes =new_map_tuple[1].export_nodes();
-        print("New map color: ",new_map_nodes[0].color)
-
-        print("Current map nodes: ", new_map_tuple[1].export_nodes())
+        print("Final map nodes: ", new_map_tuple[1].export_nodes())
 
         if new_map_tuple[0] != True:
             print("Solution not found");
