@@ -36,7 +36,7 @@ class ColorMap:
         # keys: region name, value: color
         self.map = {key: "" for key, value in constraints.items()}
         # empty string as value is easy to check later on (default/unassigned state)
-        self.colors = constraints.copy()
+        self.colors = constraints.copy()  # list of chars
         self.adjacency = adjacency  # nested list of adjacent things
         self.order = order  # order of reigons
         # Note: constraint dict is (key, value) : (region, list of potential values)
@@ -109,7 +109,7 @@ class ColorMap:
         node_lst = []
         for i in range(len(self.order)):
             n1 = Node(self.order[i], self.map[self.order[i]])
-            n1.color_options = self.colors[self.order[i]];
+            n1.color_options = self.colors[self.order[i]]
             for j in range(len(self.order)):
                 if (self.adjacency[i][j] == "1"):
                     n1.adj.append(self.order[j])
@@ -141,7 +141,7 @@ def get_node(node_list, map):
     for node in node_list:
         print(node)
         if node.color == "":
-            print(node.color_options)
+            print("color options:", node.color_options)
             legal_moves = len(node.color_options);
             if legal_moves == curr_min_moves:
                 curr_min_node.append(node);
@@ -203,7 +203,6 @@ if __name__ == '__main__':
         temp_order = []
         print("Computing file ", file_i, ":", input_files[file_i])
         for line in fileinput.FileInput(files = "Inputs/"+input_files[file_i]):  # parse input
-
             line = line.replace('\n', '').replace('\t', '').split(" ")  # formatting
             line = list(filter(lambda x: x != "", line))  # get rid of empty strings - potential spacing edge-case
             if line_num == 1:
