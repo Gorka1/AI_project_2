@@ -1,4 +1,3 @@
-*Map:
 NSW = G
 NT = G
 Q = R

@@ -1,3 +1,25 @@
+## General:
+ -This project is the product of Kora S. Hughes and Jorge A. V. Belmonte for the purpose of their AI Project #2
+  --NYU (Due: Dec. 22nd, 2021)
+ -Input files, instructions.txt, main.py and Samples (/testing) provided by professor Wong
+
+## How To Run:
+ -To run this project, place all valid game files within the /Input directory folder
+ -Then, from the AI_project_2 project directory, run the main.py file with python3
+ -This can be accomplished by typing the following line into the terminal...
+#### python3 main.py
+ --Note: you can ignore the terminal output
+ -The resulting files will be in the /Output directory
+ --Note: running code with existing output files in the output folder will result in undefined behavior (overwritting)
+ --Note: if you wish to run using the finalcode.txt you must export it to a .py file
+
+## Other Info:
+ -The text version of the code is available in the finalcode.txt as well as below this section
+ -Repo History: https://github.com/Jorge-A-Velasquez/AI_project_2
+ --If you want access to the repo email me either of the project owners
+
+
+## Final Code:
 # NYU 2021 AI Project 2 (Final) -- Constraint Satisfaction Problems: Map Coloring
 #  by: Kora S. Hughes & Jorge A. Velasquez
 
@@ -41,20 +63,20 @@ class ColorMap:
         self.adjacency = adjacency  # nested list of adjacent things
         self.order = order  # order of reigons
         # Note: constraint dict is (key, value) : (region, list of potential values)
-    
+
     def __str__(self):  # output function
         out = ""
         for region, color in self.map.items():
             out += str(region) + " = " + str(color) + "\n"
         return out
-            
+
     def is_complete(self):
         """ checks if map is completely filled out """
         for region, color in self.map.items():
             if color == "":
                 return False
         return True
-    
+
     def is_valid(self):
         """ checks if a map is *correctly* filled out """
         if not self.is_complete():  # are all reigons filled with a color?
@@ -93,11 +115,11 @@ class ColorMap:
 
     def is_adjecent(self, r1, r2):
         """ returns whether or not two reigons are adjacent """
-        # assert r1 != r2
+#         assert r1 != r2
         i = self.order.index(r1)  # Note: will give value error if not found
         j = self.order.index(r2)
         return bool(int(self.adjacency[i+1, j]))
-    
+
     def show_adj_map(self):
         """ prints formatted view of adjacency """
         max_spacing = 5
@@ -126,22 +148,20 @@ class ColorMap:
             assert type(n1) == Node
             self.import_node(n1)
 
-# returns number of unassigned neighbors a node has, used for the degree heuristic
-def num_unassigned_n(node, map):
+def num_unassigned_n(node, map): # TODO: fix up description & comment @ Jorge
     ret_val = 0
     for n_node in node.adj:
         if map.map[n_node] == "":
             ret_val += 1
     return ret_val
 
-# this is the SELECT-UNASSIGNED-VARIABLE function (called get_node for brevity)
+
 def get_node(node_list, map):
-    """ Takes in node lst + map and returns a node"""
-    curr_min_node = []  # list is used in case of multiple MRV nodes
+    """ Takes in node lst + map and returns a node"""  # TODO: fix up description & comment @ Jorge
+    curr_min_node = []
     curr_min_moves = math.inf
     # minumum remaining value heuristic
     for node in node_list:
-        # only consider unassigned nodes
         if node.color == "":
             legal_moves = len(node.color_options)
             if legal_moves == curr_min_moves:
@@ -150,10 +170,10 @@ def get_node(node_list, map):
                 curr_min_node.clear()
                 curr_min_moves = legal_moves
                 curr_min_node.append(node)
-    # if a node_list with only filled out nodes was passed (or and empty list was passed), curr_min_node won't update, so return None
+
     if len(curr_min_node) == 0:
         return None
-    # degree heuristic (based on unassigned neighbors)
+    # degree heuristic
     if len(curr_min_node) == 1:
         return curr_min_node[0]
     else:
@@ -170,7 +190,6 @@ def back_track(map):
     # check if the input map is an answer
     if map.is_valid():  # if map is completely filled out and correct
         return (True, map)
-    # valid_adjacent_reigons() is forward checking, it looks to see if any regions on the map no longer have legal choices
     # elif not map.valid_adjacent_reigons():  # check to see if there are no longer any nodes that can be filled out
     #     return (False, map);
     else:
@@ -192,10 +211,10 @@ if __name__ == '__main__':
     input_files = os.listdir(os.getcwd() + "/Inputs")  # get all files in input dir
     for file_i in range(len(input_files)):  # run code on all files in directory
         line_num = 1  # keeping track of what input line maps to what value
-        
+
         num_regions = -1  # used for error checking
         num_colors = -1
-        
+
         temp_colors = {}  # color constraints and other map information
         temp_adjacency = []
         temp_order = []
@@ -223,8 +242,14 @@ if __name__ == '__main__':
         new_map = ColorMap(temp_colors, temp_adjacency, temp_order)  # creation of map structure
         assert new_map.valid_adjacent_reigons()  # making sure map is validated - aka has no immediate dead ends
 
+        print("Start map:", new_map.__repr__())
+        print("Start map nodes: ", new_map.export_nodes())
+
         # the actual calculations
         new_map_tuple = back_track(new_map)
+
+        print("Final map:", new_map_tuple[1].__repr__())  # showing final map
+        print("Final map nodes: ", new_map_tuple[1].export_nodes())
 
         if new_map_tuple[0] != True:
             print("Solution not found")
@@ -234,3 +259,22 @@ if __name__ == '__main__':
             f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
             f.write(str(new_map_tuple[1]))
             f.close()
+
+## Output Files:
+### Output 1:
+NSW = G
+NT = G
+Q = R
+SA = B
+WA = R
+V = R
+
+### Output 2
+R1 = G
+R2 = B
+R3 = R
+R4 = Y
+R5 = R
+R6 = B
+R7 = R
+R8 = Y
