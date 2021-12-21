@@ -168,11 +168,14 @@ def back_track(map):
     elif not map.valid_adjacent_reigons():
         return (False, map);
     else:
+        # getting the next node according to heuristics
         curr_node = get_node(map.export_nodes(), map);
+        # if getting the node somehow failed, something bad happened, chances are this map isn't even good in the first place
         if curr_node == None:
             return (False, map);
-        for color in curr_node.color:
-            new_map = map.deepcopy()
+        # looping through the possible options of the current node
+        for color in curr_node.color_options:
+            new_map = copy.deepcopy(map);
             new_map.map[curr_node.name] = color;
             result = back_track(new_map);
             if result[0]:
