@@ -66,11 +66,28 @@ class ColorMap:
             # are all adjacent reigons different colors?
             for i in range(len(self.order)):
                 for j in range(len(self.order)):
-                    if self.adjacency[i][j] == 1 and \
-                            self.map[self.order[i]] == self.map[self.order[j]]:
+                    if self.adjacency[i][j] == 1 and self.map[self.order[i]] == self.map[self.order[j]]:
                         return False
         return True
-    
+
+    def valid_adjacent_reigons(self):
+        """ returns false if adjacent reigon has no options """
+        for reigon, color in self.map.items():
+            color_lst = []
+            i = self.order.index(reigon)  # adj index of this reigon
+            for adj_reigon in self.adjacency[i]:
+                if self.map[adj_reigon] != "":  # if adjacent reigon has color we save it
+                    color_lst.append(self.map[adj_reigon])
+            color_count = 0
+            for temp_color in color_lst:  # for each adjacent color
+                if temp_color in self.colors[reigon]:  # if color is in constrains we inc
+                    color_count += 1
+            # if adj colors in constraints >= num constraints there are no moves
+            if color_count >= len(self.colors[reigon]):
+                return False
+        return True
+
+
     def is_adjecent(self, r1, r2):
         """ returns whether or not two reigons are adjacent """
 #         assert r1 != r2
@@ -96,6 +113,14 @@ class ColorMap:
                     n1.adj.append(self.order[j])
             node_lst.append(n1)
         return node_lst
+
+    def import_node(self, n1):
+        self.map[n1.name] = n1.color
+
+    def import_node_lst(self, lst):
+        for n1 in lst:
+            assert type(n1) == Node
+            self.import_node(n1)
 
 
 def SUV(): # SELECT-UNASSIGNED-VARIABLE
@@ -216,6 +241,6 @@ if __name__ == '__main__':
         # write/show output
         f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
         f.write(str(new_map))
-        f.close
+        f.close()
         
     print("\n...end")
