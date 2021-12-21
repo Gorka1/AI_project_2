@@ -6,9 +6,9 @@ import os
 import copy
 import math
 
-# Backtracking Algorithm for CSPs
+# Backtracking  Algorithm for CSPs
 
-class Node:
+class Node: # helpful structure that contains all info for one specific node
     def __init__(self, new_name, new_color):
         self.name = new_name
         self.adj = []
@@ -21,11 +21,11 @@ class Node:
         out += ", " + str(self.adj)
         return out
 
-    def is_valid(self):
+    def is_valid(self):  # checks if current color within constraints
         return self.color in self.color_options
 
     def __repr__(self) -> str:
-        return str(self);
+        return str(self)
 
 # Note: regions = variables & colors = constraints
 class ColorMap:
@@ -107,6 +107,7 @@ class ColorMap:
             print(self.order[i] + spacing + "   ".join(self.adjacency[i]))
 
     def export_nodes(self):
+        """ export all current map information into a list of Node's"""
         node_lst = []
         for i in range(len(self.order)):
             n1 = Node(self.order[i], self.map[self.order[i]])
@@ -117,7 +118,7 @@ class ColorMap:
             node_lst.append(n1)
         return node_lst
 
-    def import_node(self, n1):
+    def import_node(self, n1):  # (unused) import stuff for nodes in case we want it again
         self.map[n1.name] = n1.color
 
     def import_node_lst(self, lst):
@@ -125,72 +126,66 @@ class ColorMap:
             assert type(n1) == Node
             self.import_node(n1)
 
-def num_unassigned_n(node, map):
-    ret_val = 0;
+def num_unassigned_n(node, map): # TODO: fix up description & comment @ Jorge
+    ret_val = 0
     for n_node in node.adj:
         if map.map[n_node] == "":
-            ret_val += 1;
-    return ret_val;
+            ret_val += 1
+    return ret_val
 
-# Params: node_list
-# node
+
 def get_node(node_list, map):
-    curr_min_node = [];
-    curr_min_moves = math.inf;
+    """ Takes in node lst + map and returns a node"""  # TODO: fix up description & comment @ Jorge
+    curr_min_node = []
+    curr_min_moves = math.inf
     # minumum remaining value heuristic
     for node in node_list:
         if node.color == "":
-            legal_moves = len(node.color_options);
+            legal_moves = len(node.color_options)
             if legal_moves == curr_min_moves:
-                curr_min_node.append(node);
+                curr_min_node.append(node)
             elif legal_moves < curr_min_moves:
-                curr_min_node.clear();
-                curr_min_moves = legal_moves;
-                curr_min_node.append(node);
+                curr_min_node.clear()
+                curr_min_moves = legal_moves
+                curr_min_node.append(node)
 
     if len(curr_min_node) == 0:
-        return None;
+        return None
     # degree heuristic
     if len(curr_min_node) == 1:
-        return curr_min_node[0];
+        return curr_min_node[0]
     else:
-        curr_ret_node = curr_min_node[0];
+        curr_ret_node = curr_min_node[0]
         for node in curr_min_node:
-            curr_value = num_unassigned_n(node, map);
+            curr_value = num_unassigned_n(node, map)
             if curr_value < num_unassigned_n(curr_ret_node, map):
-                curr_ret_node = node;
-        return curr_ret_node;
+                curr_ret_node = node
+        return curr_ret_node
 
 # Returns a tuple (was an answer found, the answer found)
 def back_track(map):
-    print("back track called with map:", map.export_nodes(), map.is_valid(), map.valid_adjacent_reigons())
+    # print("Back-Tracking Map: ", map.export_nodes(), map.is_valid(), map.valid_adjacent_reigons(), "\r")
     # check if the input map is an answer
-    if map.is_valid():
-        return (True, map);
-    # check to see if there are no longer any nodes that can be filled out
-    # elif not map.valid_adjacent_reigons():
+    if map.is_valid():  # if map is completely filled out and correct
+        return (True, map)
+    # elif not map.valid_adjacent_reigons():  # check to see if there are no longer any nodes that can be filled out
     #     return (False, map);
     else:
-        # getting the next node according to heuristics
-        curr_node = get_node(map.export_nodes(), map);
+        curr_node = get_node(map.export_nodes(), map) # getting the next node according to heuristics
         # if getting the node somehow failed, something bad happened, chances are this map isn't even good in the first place
         if curr_node == None:
-            return (False, map);
+            return (False, map)
         # looping through the possible options of the current node
         for color in curr_node.color_options:
-            new_map = copy.deepcopy(map);
-            # print("old map:", map)
-            # print("new map:", new_map)
-            new_map.map[curr_node.name] = color;
-            result = back_track(new_map);
+            new_map = copy.deepcopy(map)
+            new_map.map[curr_node.name] = color
+            result = back_track(new_map)
             if result[0]:
-                return result;
-        # no valid solution was found
-        return (False, map);
+                return result
+        return (False, map) # no valid solution was found
+
 
 if __name__ == '__main__':
-    print("start...\n")
-    
     input_files = os.listdir(os.getcwd() + "/Inputs")  # get all files in input dir
     for file_i in range(len(input_files)):  # run code on all files in directory
         line_num = 1  # keeping track of what input line maps to what value
@@ -198,13 +193,14 @@ if __name__ == '__main__':
         num_regions = -1  # used for error checking
         num_colors = -1
         
-        temp_colors = {}
+        temp_colors = {}  # color constraints and other map information
         temp_adjacency = []
         temp_order = []
-        print("Computing file ", file_i, ":", input_files[file_i])
+        print("\n**Computing file ", (file_i+1), ":", input_files[file_i])
         for line in fileinput.FileInput(files = "Inputs/"+input_files[file_i]):  # parse input
             line = line.replace('\n', '').replace('\t', '').split(" ")  # formatting
             line = list(filter(lambda x: x != "", line))  # get rid of empty strings - potential spacing edge-case
+            # separate parsed input into various structures for a ColorMap
             if line_num == 1:
                 num_regions = int(line[0])
                 num_colors = int(line[1])
@@ -218,40 +214,26 @@ if __name__ == '__main__':
                 if len(line) > 0:
                     temp_adjacency.append(line)
             line_num += 1
-        assert num_regions != -1 and num_colors != -1  # testing
-        assert len(temp_adjacency) == len(temp_adjacency[0]) == len(temp_order) == num_regions
-        new_map = ColorMap(temp_colors, temp_adjacency, temp_order)
 
-        # testing prints
-        # new_map.show_adj_map()
-        # for temp_node in new_map.export_nodes():
-        #     print("Node:", str(temp_node))
-        # print(str(new_map))
+        assert num_regions != -1 and num_colors != -1  # double-checking input info consistency
+        assert len(temp_adjacency) == len(temp_adjacency[0]) == len(temp_order) == num_regions
+        new_map = ColorMap(temp_colors, temp_adjacency, temp_order)  # creation of map structure
+        assert new_map.valid_adjacent_reigons()  # making sure map is validated - aka has no immediate dead ends
+
         print("Start map:", new_map.__repr__())
         print("Start map nodes: ", new_map.export_nodes())
-        #new_map.map["NSW"] = 'R'
-        print("Start map valid?", new_map.valid_adjacent_reigons())
-        # test_map = copy.deepcopy(new_map)
-        # #test_map = new_map;
-        # test_map.map["NSW"] = "r"
-        # x = new_map.export_nodes();
-        # print("real map", new_map, "Nodes:", x)
-        # x = test_map.export_nodes();
-        # print("Test map", test_map, "Nodes:", x)
 
         # the actual calculations
-        # TODO: compute answer here
-        new_map_tuple = back_track(new_map);
-        
-        print("Final map:", new_map_tuple[1].__repr__())
+        new_map_tuple = back_track(new_map)
+
+        print("Final map:", new_map_tuple[1].__repr__())  # showing final map
         print("Final map nodes: ", new_map_tuple[1].export_nodes())
 
         if new_map_tuple[0] != True:
-            print("Solution not found");
+            print("Solution not found")
+            # assert False
         else:
             # write/show output
             f = open("Outputs/output"+str(file_i+1)+".txt", "w")  # create file if it doesnt exist
             f.write(str(new_map_tuple[1]))
             f.close()
-        
-    print("\n...end")
