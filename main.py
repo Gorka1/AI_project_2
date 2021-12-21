@@ -79,7 +79,7 @@ class ColorMap:
             j = 0  # index of subreigon
             for adj_reigon in self.adjacency[i]:
                 if adj_reigon == "1" and self.map[self.order[j]] != "":  # if adjacent reigon has color we save it
-                    color_lst.append(self.map[adj_reigon])
+                    color_lst.append(self.map[self.order[j]])
                 j += 1
             color_count = 0
             for temp_color in color_lst:  # for each adjacent color
