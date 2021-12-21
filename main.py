@@ -116,6 +116,46 @@ def degree(map, constraints):  # degree heuristic
     return regions
 
 
+# Params: node_list
+# node
+def get_node(node_list):
+    curr_min_node = [];
+    curr_min_moves = 0;
+    # minumum remaining value heuristic
+    for node in node_list:
+        if node.color != None:
+            legal_moves = node.legal_moves;
+            if legal_moves == curr_min_moves:
+                curr_min_node.append(node);
+            elif legal_moves < curr_min_moves:
+                curr_min_node.clear();
+                curr_min_moves = legal_moves;
+                curr_min_node.append(node);
+    # degree heuristic
+    if len(curr_min_node) == 0:
+        return curr_min_node[0];
+    else:
+        curr_ret_node = curr_min_node[0];
+        for node in curr_min_node:
+            curr_value = node.num_unassigned_n();
+            if curr_value > curr_ret_node.num_unassigned_n():
+                curr_ret_node = node;
+        return curr_ret_node;
+
+# how do i update the map???
+def back_track(map):
+    if not map.is_valid:
+        return False;
+    else:
+        # node_result = False;
+        # # needs
+        # while (not node_result):
+        #     curr_node = get_node();
+        #     node_result = back_track(curr_node);
+        curr_node = get_node(map.nodes);
+        for color in curr_node.color:
+            map.update_region();
+
 if __name__ == '__main__':
     print("start...\n")
     
